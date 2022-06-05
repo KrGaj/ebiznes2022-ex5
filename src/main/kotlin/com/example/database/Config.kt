@@ -1,8 +1,8 @@
 package com.example.database
 
 object Config {
-    val url = ""
-    val username = ""
-    val password = ""
-    val driver = "com.postgresql.jdbc.Driver"
+    val url: String = System.getenv("database_url")
+    val username: String = System.getenv("database_username")
+    val password: String = System.getenv("database_password")
+    const val driver = "org.postgresql.Driver"
 }

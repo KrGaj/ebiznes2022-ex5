@@ -1,4 +1,4 @@
 package com.example.api
 
-class PurchaseAPI {
+object PurchaseAPI {
 }

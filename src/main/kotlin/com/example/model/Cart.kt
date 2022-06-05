@@ -14,6 +14,6 @@ interface Cart: Entity<Cart> {
 }
 
 object Carts: Table<Cart>("carts") {
-    val id = uuid("id").primaryKey().bindTo { it.id }
-    val userId = uuid("userId").references(Users) { it.user }
+    val id = uuid("cart_id").primaryKey().bindTo { it.id }
+    val userId = uuid("user_id").references(Users) { it.user }
 }

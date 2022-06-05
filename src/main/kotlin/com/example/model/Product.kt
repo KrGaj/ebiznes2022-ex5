@@ -1,10 +1,7 @@
 package com.example.model
 
 import org.ktorm.entity.Entity
-import org.ktorm.schema.Table
-import org.ktorm.schema.float
-import org.ktorm.schema.uuid
-import org.ktorm.schema.varchar
+import org.ktorm.schema.*
 import java.util.UUID
 
 interface Product: Entity<Product> {
@@ -15,12 +12,14 @@ interface Product: Entity<Product> {
     val description: String
     val price: Float
     val category: Category
+    val available: Int
 }
 
 object Products: Table<Product>("products") {
-    val id = uuid("id").primaryKey().bindTo { it.id }
-    val name = varchar("name").bindTo { it.name }
+    val id = uuid("product_id").primaryKey().bindTo { it.id }
+    val name = varchar("product_name").bindTo { it.name }
     val description = varchar("description").bindTo { it.description }
     val price = float("price").bindTo { it.price }
-    val categoryId = uuid("category_id").references(Categories) { it.category }
+    val category = uuid("category_id").references(Categories) { it.category }
+    val available = int("available").bindTo { it.available }
 }

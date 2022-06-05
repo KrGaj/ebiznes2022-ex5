@@ -18,9 +18,9 @@ interface User: Entity<User> {
 
 
 object Users: Table<User>("users") {
-    val id = uuid("id").primaryKey()
+    val id = uuid("user_id").primaryKey()
     val username = varchar("username")
-    val passwordAsHash = varchar("password_hash")
+    val passwordAsHash = varchar("password")
     val email = varchar("email")
     val accessToken = varchar("access_token")
 }

@@ -14,8 +14,8 @@ interface Payment: Entity<Payment> {
 }
 
 object Payments: Table<Payment>("payments") {
-    val id = uuid("id").primaryKey().bindTo { it.id }
-    val method = varchar("method").bindTo { it.method }
-    val date = long("paymentDate").bindTo { it.date }
+    val id = uuid("payment_id").primaryKey().bindTo { it.id }
+    val method = varchar("payment_method").bindTo { it.method }
+    val date = long("payment_date").bindTo { it.date }
     val paid = boolean("paid").bindTo { it.paid }
 }

@@ -14,6 +14,6 @@ interface Category: Entity<Category> {
 }
 
 object Categories: Table<Category>("categories") {
-    val id = uuid("id").primaryKey().bindTo { it.id }
-    val name = varchar("name").bindTo { it.name }
+    val id = uuid("category_id").primaryKey().bindTo { it.id }
+    val name = varchar("category_name").bindTo { it.name }
 }

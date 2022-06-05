@@ -12,7 +12,7 @@ import io.ktor.server.response.*
 import org.ktorm.dsl.*
 import java.util.UUID
 
-class CartAPI {
+object CartAPI {
     private val database = Database.instance
 
     suspend fun get(call: ApplicationCall) {
@@ -43,7 +43,7 @@ class CartAPI {
 
         val response = CartResponseGet(carts, cartProducts)
 
-        call.respond(response)
+        call.respond(HttpStatusCode.OK, response)
     }
 
     suspend fun addProduct(call: ApplicationCall) {
@@ -51,7 +51,7 @@ class CartAPI {
 
         val id = database.insertAndGenerateKey(CartProducts) {
             set(it.cart, cartProduct.cart.id)
-            set(it.productId, cartProduct.product.id)
+            set(it.product, cartProduct.product.id)
             set(it.amount, cartProduct.amount)
         } as UUID
 
@@ -76,6 +76,11 @@ class CartAPI {
 
     suspend fun updateProduct(call: ApplicationCall) {
         val cartProduct = call.receive<CartProduct>()
+
+        if (cartProduct.amount == 0) {
+            removeProduct(call)
+            return
+        }
 
         database.update(CartProducts) {
             set(it.amount, cartProduct.amount)
