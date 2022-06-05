@@ -14,7 +14,7 @@ interface Product: Entity<Product> {
     val name: String
     val description: String
     val price: Float
-    val categoryId: Category
+    val category: Category
 }
 
 object Products: Table<Product>("products") {
@@ -22,5 +22,5 @@ object Products: Table<Product>("products") {
     val name = varchar("name").bindTo { it.name }
     val description = varchar("description").bindTo { it.description }
     val price = float("price").bindTo { it.price }
-    val categoryId = uuid("category_id").references(Categories) { it.categoryId }
+    val categoryId = uuid("category_id").references(Categories) { it.category }
 }

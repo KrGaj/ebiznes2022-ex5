@@ -9,8 +9,8 @@ import java.util.UUID
 interface Category: Entity<Category> {
     companion object: Entity.Factory<Category>()
 
-    val id: UUID
-    val name: String
+    var id: UUID
+    var name: String
 }
 
 object Categories: Table<Category>("categories") {

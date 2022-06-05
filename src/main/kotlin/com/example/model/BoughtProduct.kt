@@ -9,13 +9,15 @@ import java.util.UUID
 interface BoughtProduct: Entity<BoughtProduct> {
     companion object: Entity.Factory<BoughtProduct>()
 
-    val id: UUID
-    val amount: Int
-    val product: Product
+    var id: UUID
+    var purchase: Purchase
+    var amount: Int
+    var product: Product
 }
 
 object BoughtProducts: Table<BoughtProduct>("bought_products") {
     val id = uuid("id").primaryKey().bindTo { it.id }
+    val purchase = uuid("purchaseId").references(Purchases) { it.purchase }
     val amount = int("amount").bindTo { it.amount }
     val productId = uuid("productId").references(Products) { it.product }
 }

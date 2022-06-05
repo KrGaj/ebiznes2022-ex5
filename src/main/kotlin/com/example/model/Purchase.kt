@@ -11,13 +11,11 @@ interface Purchase: Entity<Purchase> {
 
     val id: UUID
     val user: User
-    val products: List<BoughtProduct>
     val payment: Payment
 }
 
 object Purchases: Table<Purchase>("purchases") {
     val id = uuid("id").primaryKey().bindTo { it.id }
     val userId = uuid("userId").references(Users) { it.user }
-    val products = json<List<BoughtProduct>>("products").bindTo { it.products }
     val payment = uuid("payment").references(Payments) { it.payment }
 }
