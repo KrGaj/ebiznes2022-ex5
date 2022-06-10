@@ -1,6 +1,7 @@
 package com.example.api
 
 import com.example.database.Database
+import com.example.model.Carts
 import com.example.model.User
 import com.example.model.Users
 import io.ktor.http.*
@@ -42,9 +43,32 @@ object UserAPI {
             set(it.accessToken, user.accessToken)
         }
 
-        when(id) {
-            null -> call.respond(HttpStatusCode.InternalServerError)
-            else -> call.respond(HttpStatusCode.OK, id)
+        val cart = database.insertReturning(Carts, Carts.id) {
+            set(it.userId, user.id)
         }
+
+        if (id == null || cart == null) {
+            call.respond(HttpStatusCode.InternalServerError)
+        }
+        else {
+            call.respond(HttpStatusCode.OK, id)
+        }
+    }
+
+    suspend fun updateUser(call: ApplicationCall) {
+        val user = call.receive<User>()
+
+        val ret = database
+            .update(Users) {
+                set(it.email, user.email)
+                set(it.passwordAsHash, user.passwordAsHash)
+                set(it.accessToken, user.accessToken)
+
+                where {
+                    Users.id eq user.id
+                }
+            }
+
+        call.respond(HttpStatusCode.OK)
     }
 }

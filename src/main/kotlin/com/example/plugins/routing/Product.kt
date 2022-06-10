@@ -1,5 +1,6 @@
 package com.example.plugins.routing
 
+import com.example.api.CartAPI
 import com.example.api.ProductAPI
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
@@ -7,6 +8,12 @@ import io.ktor.server.routing.*
 fun Application.productRouting() {
     routing {
         route("/products") {
+            route("all") {
+                get() {
+                    ProductAPI.getAll(call)
+                }
+            }
+
             get {
                 ProductAPI.get(call)
             }
@@ -18,10 +25,10 @@ fun Application.productRouting() {
             delete {
                 ProductAPI.removeProduct(call)
             }
-        }
 
-        get("/products/all") {
-            ProductAPI.getAll(call)
+            put {
+                ProductAPI.updateProduct(call)
+            }
         }
     }
 }

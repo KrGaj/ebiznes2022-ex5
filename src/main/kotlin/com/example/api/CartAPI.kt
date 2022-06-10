@@ -1,10 +1,7 @@
 package com.example.api
 
-import com.example.api.response.CartResponseGet
 import com.example.database.Database
-import com.example.model.CartProduct
-import com.example.model.CartProducts
-import com.example.model.Carts
+import com.example.model.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -15,7 +12,7 @@ import java.util.UUID
 object CartAPI {
     private val database = Database.instance
 
-    suspend fun get(call: ApplicationCall) {
+    suspend fun getByUserId(call: ApplicationCall) {
         val userId = UUID.fromString(call.parameters["userId"])
 
         val cartQuery = database
@@ -32,18 +29,15 @@ object CartAPI {
 
         val productsQuery = database
             .from(CartProducts)
-            .select()
+            .joinReferencesAndSelect()
 
         val cartProducts = productsQuery.map {row ->
             CartProducts.createEntity(row)
-        }
-            .filter {cartProduct ->
+        }.filter {cartProduct ->
                 cartProduct.id in carts.map { it.id }
             }
 
-        val response = CartResponseGet(carts, cartProducts)
-
-        call.respond(HttpStatusCode.OK, response)
+        call.respond(HttpStatusCode.OK, cartProducts)
     }
 
     suspend fun addProduct(call: ApplicationCall) {
@@ -62,6 +56,20 @@ object CartAPI {
         println("CartAPI.addProduct: $test")
 
         call.respond(HttpStatusCode.OK)
+    }
+
+    suspend fun addMultipleProducts(call: ApplicationCall) {
+        val products = call.receive<List<Product>>()
+
+        for (product in products) {
+            database
+                .insert(Products) {
+                    set(it.name, product.name)
+                    set(it.description, product.description)
+                    set(it.price, product.price)
+                    set(it.available, product.available)
+                }
+        }
     }
 
     suspend fun removeProduct(call: ApplicationCall) {

@@ -7,8 +7,14 @@ import io.ktor.server.routing.*
 fun Application.cartRouting() {
     routing {
         route("/cart") {
+            route("add_multiple") {
+                post {
+                    CartAPI.addMultipleProducts(call)
+                }
+            }
+
             get {
-                CartAPI.get(call)
+                CartAPI.getByUserId(call)
             }
 
             post {

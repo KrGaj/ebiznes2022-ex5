@@ -14,6 +14,10 @@ fun Application.userRouting() {
             post {
                 UserAPI.addUser(call)
             }
+
+            put {
+                UserAPI.updateUser(call)
+            }
         }
     }
 }

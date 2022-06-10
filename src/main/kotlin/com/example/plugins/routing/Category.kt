@@ -7,6 +7,12 @@ import io.ktor.server.routing.*
 fun Application.categoryRouting() {
     routing {
         route("/categories") {
+            route("all") {
+                get() {
+                    CategoryAPI.getAll(call)
+                }
+            }
+
             get {
                 CategoryAPI.get(call)
             }
@@ -18,10 +24,6 @@ fun Application.categoryRouting() {
             delete {
                 CategoryAPI.removeCategory(call)
             }
-        }
-
-        get("/categories/all") {
-            CategoryAPI.getAll(call)
         }
     }
 }

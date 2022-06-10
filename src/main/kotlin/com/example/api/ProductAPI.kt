@@ -19,7 +19,7 @@ object ProductAPI {
 
         val query = database
             .from(Products)
-            .select()
+            .joinReferencesAndSelect()
             .where {
                 Products.id eq productId
             }
@@ -37,7 +37,7 @@ object ProductAPI {
     suspend fun getAll(call: ApplicationCall) {
         val query = database
             .from(Products)
-            .select()
+            .joinReferencesAndSelect()
 
         val products = query.map { row ->
             Products.createEntity(row)

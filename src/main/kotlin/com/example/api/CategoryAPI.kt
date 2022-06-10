@@ -18,7 +18,7 @@ object CategoryAPI {
 
         val query = database
             .from(Categories)
-            .select()
+            .joinReferencesAndSelect()
             .where {
                 Categories.id eq categoryId
             }
