@@ -1,6 +1,5 @@
 package com.example.model
 
-import com.example.utils.json
 import org.ktorm.entity.Entity
 import org.ktorm.schema.Table
 import org.ktorm.schema.int

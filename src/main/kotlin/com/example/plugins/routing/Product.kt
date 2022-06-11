@@ -1,6 +1,5 @@
 package com.example.plugins.routing
 
-import com.example.api.CartAPI
 import com.example.api.ProductAPI
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
