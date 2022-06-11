@@ -1,0 +1,3 @@
+[submodule "ebiznes2022-ex5-frontend"]
+	path = ebiznes2022-ex5-frontend
+	url = git@github.com:krystian0120/ebiznes2022-ex5-frontend.git
