@@ -11,6 +11,7 @@ interface Payment: Entity<Payment> {
     val method: String
     val date: Long
     val paid: Boolean
+    val user: User
 }
 
 object Payments: Table<Payment>("payments") {
@@ -18,4 +19,5 @@ object Payments: Table<Payment>("payments") {
     val method = varchar("payment_method").bindTo { it.method }
     val date = long("payment_date").bindTo { it.date }
     val paid = boolean("paid").bindTo { it.paid }
+    val user = uuid("user_id").references(Users) { it.user }
 }

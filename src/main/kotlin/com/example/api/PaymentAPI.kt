@@ -34,6 +34,23 @@ object PaymentAPI {
         }
     }
 
+    suspend fun getByUserId(call: ApplicationCall) {
+        val userId = UUID.fromString(call.parameters["user_id"])
+
+        val query = database
+            .from(Payments)
+            .joinReferencesAndSelect()
+            .where {
+                Payments.user eq userId
+            }
+
+        val payments = query.map { row ->
+            Payments.createEntity(row)
+        }
+
+        call.respond(HttpStatusCode.OK, payments)
+    }
+
     suspend fun addPayment(call: ApplicationCall) {
         val payment = call.receive<Payment>()
 
