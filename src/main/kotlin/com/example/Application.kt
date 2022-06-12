@@ -9,10 +9,16 @@ import io.ktor.server.plugins.cors.routing.*
 
 fun main() {
     embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
-//        install(CORS) {
-//            allowHost("localhost:3000")
-//            allowHeader(HttpHeaders.ContentType)
-//        }
+        install(CORS) {
+            allowHost("localhost:3000")
+            allowHeader(HttpHeaders.ContentType)
+            allowHeader(HttpHeaders.AccessControlAllowOrigin)
+            allowMethod(HttpMethod.Options)
+            allowMethod(HttpMethod.Put)
+            allowMethod(HttpMethod.Patch)
+            allowMethod(HttpMethod.Delete)
+//            anyHost()
+        }
 
         configureRouting()
         configureSerialization()
