@@ -58,7 +58,7 @@ object UserAPI {
     suspend fun updateUser(call: ApplicationCall) {
         val user = call.receive<User>()
 
-        val ret = database
+        val updated = database
             .update(Users) {
                 set(it.email, user.email)
                 set(it.passwordAsHash, user.passwordAsHash)
@@ -69,6 +69,6 @@ object UserAPI {
                 }
             }
 
-        call.respond(HttpStatusCode.OK)
+        call.respond(HttpStatusCode.OK, updated)
     }
 }
