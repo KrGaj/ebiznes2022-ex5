@@ -7,7 +7,7 @@ import io.ktor.server.routing.*
 fun Application.paymentRouting() {
     routing {
         route("/payments") {
-            route("by_user") {
+            route("user") {
                 get {
                     PaymentAPI.getByUserId(call)
                 }
