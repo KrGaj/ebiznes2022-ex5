@@ -38,15 +38,15 @@ CREATE TABLE IF NOT EXISTS payments (
     payment_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     payment_method VARCHAR(30) NOT NULL,
     payment_date BIGINT NOT NULL,
-    paid BOOLEAN NOT NULL
+    paid BOOLEAN NOT NULL,
+    user_id UUID NOT NULL REFERENCES users(user_id)
 );
 
 CREATE TABLE IF NOT EXISTS purchases (
     purchase_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES users(user_id),
     cash_sum INTEGER NOT NULL,
-    payment_id UUID NOT NULL REFERENCES payments(payment_id),
-    user_id UUID NOT NULL REFERENCES users(user_id)
+    payment_id UUID NOT NULL REFERENCES payments(payment_id)
 );
 
 CREATE TABLE IF NOT EXISTS purchase_products (
