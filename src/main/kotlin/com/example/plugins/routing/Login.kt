@@ -16,5 +16,9 @@ fun Application.loginRouting() {
                 GoogleLoginAPI.callback(call)
             }
         }
+
+        get("/login/google/status") {
+            GoogleLoginAPI.getLoginStatus(call)
+        }
     }
 }

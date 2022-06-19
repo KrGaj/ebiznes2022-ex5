@@ -58,4 +58,15 @@ object GoogleLoginAPI {
             call.respondRedirect("/")
         }
     }
+
+    suspend fun getLoginStatus(call: ApplicationCall) {
+        val session = call.sessions.get<UserSession>()
+        var userSession = UserSession(false, "", null)
+
+        if (session != null) {
+            userSession = UserSession(true, session.accessToken, session.userId)
+        }
+
+        call.respond(HttpStatusCode.OK, userSession)
+    }
 }

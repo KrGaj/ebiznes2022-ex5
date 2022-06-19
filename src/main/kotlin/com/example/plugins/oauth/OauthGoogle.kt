@@ -1,6 +1,7 @@
 package com.example.plugins.oauth
 
 import io.ktor.client.*
+import io.ktor.client.engine.apache.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -22,7 +23,7 @@ fun Application.configureOauthGoogle() {
                 )
             }
 
-            client = HttpClient()
+            client = HttpClient(Apache)
         }
     }
 }
