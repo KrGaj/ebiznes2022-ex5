@@ -12,3 +12,5 @@ inline fun <reified C : Any> BaseTable<*>.json(
 ): Column<C> {
     return registerColumn(name, JsonSqlType(mapper, mapper.constructType(typeOf<C>())))
 }
+
+

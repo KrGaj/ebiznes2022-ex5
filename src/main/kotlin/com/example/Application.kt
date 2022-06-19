@@ -7,9 +7,10 @@ import com.example.plugins.configureOauth
 
 fun main() {
     embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
+        configureSessions()
         configureCors()
-        configureRouting()
         configureOauth()
+        configureRouting()
         configureSerialization()
     }.start(wait = true)
 }
