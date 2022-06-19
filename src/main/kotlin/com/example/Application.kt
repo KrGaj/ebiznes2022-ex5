@@ -3,24 +3,13 @@ package com.example
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import com.example.plugins.*
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.plugins.cors.routing.*
+import com.example.plugins.configureOauth
 
 fun main() {
     embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
-        install(CORS) {
-            allowHost("localhost:3000")
-            allowHeader(HttpHeaders.ContentType)
-            allowHeader(HttpHeaders.AccessControlAllowOrigin)
-            allowMethod(HttpMethod.Options)
-            allowMethod(HttpMethod.Put)
-            allowMethod(HttpMethod.Patch)
-            allowMethod(HttpMethod.Delete)
-//            anyHost()
-        }
-
+        configureCors()
         configureRouting()
+        configureOauth()
         configureSerialization()
     }.start(wait = true)
 }
