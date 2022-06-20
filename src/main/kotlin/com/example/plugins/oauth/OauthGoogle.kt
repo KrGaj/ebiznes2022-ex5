@@ -9,7 +9,7 @@ import io.ktor.server.auth.*
 fun Application.configureOauthGoogle() {
     install(Authentication) {
         oauth("auth-oauth-google") {
-            urlProvider = { "http://localhost:8080/callback" }
+            urlProvider = { "http://localhost:8080/callback/google" }
 
             providerLookup = {
                 OAuthServerSettings.OAuth2ServerSettings(

@@ -38,11 +38,18 @@ object GoogleLoginAPI {
 
             if (users.isEmpty())
             {
-                val userInfo: User = HttpClient().get("https://www.googleapis.com/oauth2/v2/userinfo") {
+                val info = HttpClient().get("https://www.googleapis.com/oauth2/v2/userinfo") {
                     headers {
                         append(HttpHeaders.Authorization, "Bearer $accessToken")
+                        append(HttpHeaders.Accept, "application/json")
                     }
-                }.body()
+                }
+
+                val infoStr: String = info.body()
+
+                print(infoStr)
+
+                val userInfo: User = info.body()
 
                 userId = database.insertReturning(Users, Users.id) {
                     set(it.username, userInfo.email)
