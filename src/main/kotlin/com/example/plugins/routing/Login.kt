@@ -1,5 +1,6 @@
 package com.example.plugins.routing
 
+import com.example.api.CommonLoginAPI
 import com.example.api.GoogleLoginAPI
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -17,8 +18,8 @@ fun Application.loginRouting() {
             }
         }
 
-        get("/login/google/status") {
-            GoogleLoginAPI.getLoginStatus(call)
+        get("/login/status") {
+            CommonLoginAPI.getLoginStatus(call)
         }
     }
 }

@@ -6,8 +6,9 @@ import io.ktor.server.sessions.*
 
 fun Application.configureSessions() {
     install(Sessions) {
-        cookie<UserSession>("user_session") {
-            cookie.secure = true
+        cookie<UserSession>("user_data", SessionStorageMemory()) {
+            cookie.path = "/login/status"
+//            cookie.secure = true
         }
     }
 }

@@ -18,10 +18,10 @@ interface User: Entity<User> {
 
 
 object Users: Table<User>("users") {
-    val id = uuid("user_id").primaryKey()
-    val username = varchar("username")
-    val passwordAsHash = varchar("password")
-    val email = varchar("email")
-    val accessToken = varchar("access_token")
+    val id = uuid("user_id").primaryKey().bindTo { it.id }
+    val username = varchar("username").bindTo { it.username }
+    val passwordAsHash = varchar("password").bindTo { it.passwordAsHash }
+    val email = varchar("email").bindTo { it.email }
+    val accessToken = varchar("access_token").bindTo { it.accessToken }
 }
 

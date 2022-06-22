@@ -4,8 +4,8 @@ CREATE TABLE IF NOT EXISTS users (
     user_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     username VARCHAR(30) NOT NULL UNIQUE,
     password VARCHAR(30),
-    email VARCHAR(50) NOT NULL UNIQUE,
-    access_token VARCHAR(100)
+    email VARCHAR(100),
+    access_token VARCHAR(250)
 );
 
 CREATE TABLE IF NOT EXISTS categories (

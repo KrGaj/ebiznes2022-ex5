@@ -1,9 +1,10 @@
 package com.example.api
 
 import com.example.database.Database
-import com.example.model.User
 import com.example.model.Users
+import com.example.model.session.OauthUserInfo
 import com.example.model.session.UserSession
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -26,54 +27,49 @@ object GoogleLoginAPI {
             val accessToken = principal.accessToken
             val userId: UUID?
 
+            val info: String = HttpClient().get("https://www.googleapis.com/oauth2/v2/userinfo") {
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $accessToken")
+                    append(HttpHeaders.Accept, "application/json")
+                }
+            }.body()
+
+            val objectMapper = ObjectMapper()
+            val userInfo = objectMapper.readValue(info, OauthUserInfo::class.java)
+
             val query = database.from(Users)
-                .select()
+                .joinReferencesAndSelect()
                 .where {
-                    Users.accessToken eq accessToken
+                    Users.email eq userInfo.email
                 }
 
             val users = query.map { row ->
                 Users.createEntity(row)
             }
 
-            if (users.isEmpty())
-            {
-                val info = HttpClient().get("https://www.googleapis.com/oauth2/v2/userinfo") {
-                    headers {
-                        append(HttpHeaders.Authorization, "Bearer $accessToken")
-                        append(HttpHeaders.Accept, "application/json")
-                    }
-                }
+            userId = if (users.isEmpty()) {
+                println(info)
 
-                val infoStr: String = info.body()
-
-                print(infoStr)
-
-                val userInfo: User = info.body()
-
-                userId = database.insertReturning(Users, Users.id) {
+                database.insertReturning(Users, Users.id) {
                     set(it.username, userInfo.email)
                     set(it.email, userInfo.email)
                     set(it.accessToken, accessToken)
                 }
-            }
-            else {
-                userId = users.first().id
+            } else {
+                println(users.first())
+                println(users.first().id)
+                users.first().id
             }
 
             call.sessions.set(UserSession(loggedIn = true, principal.accessToken, userId!!))
-            call.respondRedirect("/")
+            call.response.cookies.append(
+                Cookie(
+                    name = "user_info",
+                    path = "/",
+                    value = UserSession(loggedIn = true, principal.accessToken, userId!!).toString()
+                )
+            )
+            call.respondRedirect("http://localhost:3000/")
         }
-    }
-
-    suspend fun getLoginStatus(call: ApplicationCall) {
-        val session = call.sessions.get<UserSession>()
-        var userSession = UserSession(false, "", null)
-
-        if (session != null) {
-            userSession = UserSession(true, session.accessToken, session.userId)
-        }
-
-        call.respond(HttpStatusCode.OK, userSession)
     }
 }
