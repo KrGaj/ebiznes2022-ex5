@@ -1,6 +1,6 @@
 package com.example.model.session
 
-data class OauthUserInfo(
+data class OauthUserInfoGoogle(
     val id: String = "",
     val name: String = "",
     val given_name: String = "",

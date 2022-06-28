@@ -2,8 +2,10 @@ package com.example.api
 
 import com.example.database.Database
 import com.example.model.Users
-import com.example.model.session.OauthUserInfoGoogle
+import com.example.model.session.OauthUserEmailsGithub
+import com.example.model.session.OauthUserInfoGithub
 import com.example.model.session.UserSession
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -17,7 +19,7 @@ import org.ktorm.dsl.*
 import org.ktorm.support.postgresql.insertReturning
 import java.util.*
 
-object GoogleLoginAPI {
+object GithubLoginAPI {
     private val database = Database.instance
 
     suspend fun callback(call: ApplicationCall) {
@@ -27,20 +29,36 @@ object GoogleLoginAPI {
             val accessToken = principal.accessToken
             val userId: UUID?
 
-            val info: String = HttpClient().get("https://www.googleapis.com/oauth2/v2/userinfo") {
+            val info: String = HttpClient().get("https://api.github.com/user") {
                 headers {
-                    append(HttpHeaders.Authorization, "Bearer $accessToken")
+                    append(HttpHeaders.Authorization, "token $accessToken")
                     append(HttpHeaders.Accept, "application/json")
                 }
             }.body()
 
             val objectMapper = ObjectMapper()
-            val userInfo = objectMapper.readValue(info, OauthUserInfoGoogle::class.java)
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            var userInfo = objectMapper.readValue(info, OauthUserInfoGithub::class.java)
+
+            if (userInfo.email == null) {
+                val emails: String = HttpClient().get("https://api.github.com/user/emails") {
+                    headers {
+                        append(HttpHeaders.Authorization, "token $accessToken")
+                        append(HttpHeaders.Accept, "application/json")
+                    }
+                }.body()
+
+                val userEmails: List<OauthUserEmailsGithub> = objectMapper.readValue(
+                    emails, objectMapper.typeFactory.constructCollectionType(
+                        List::class.java, OauthUserEmailsGithub::class.java))
+
+                userInfo = userInfo.copy(email = userEmails.first().email)
+            }
 
             val query = database.from(Users)
                 .joinReferencesAndSelect()
                 .where {
-                    Users.email eq userInfo.email
+                    Users.email eq userInfo.email!!
                 }
 
             val users = query.map { row ->
@@ -66,7 +84,7 @@ object GoogleLoginAPI {
                 Cookie(
                     name = "user_info",
                     path = "/",
-                    value = UserSession(loggedIn = true, principal.accessToken, userId!!).toString()
+                    value = UserSession(loggedIn = true, principal.accessToken, userId).toString()
                 )
             )
             call.respondRedirect("http://localhost:3000/")
