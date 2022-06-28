@@ -1,9 +1,6 @@
 package com.example.api
 
-import com.example.database.Database
-import com.example.model.Users
 import com.example.model.session.OauthUserInfoGoogle
-import com.example.model.session.UserSession
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -11,11 +8,6 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.response.*
-import io.ktor.server.sessions.*
-import org.ktorm.dsl.*
-import org.ktorm.support.postgresql.insertReturning
-import java.util.*
 
 object GoogleLoginAPI {
     suspend fun callback(call: ApplicationCall) {

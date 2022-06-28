@@ -1,6 +1,5 @@
 package com.example.api
 
-import com.example.database.Database
 import com.example.model.session.OauthUserEmailsGithub
 import com.example.model.session.OauthUserInfoGithub
 import com.fasterxml.jackson.databind.DeserializationFeature
@@ -11,7 +10,6 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import java.util.*
 
 object GithubLoginAPI {
     suspend fun callback(call: ApplicationCall) {
