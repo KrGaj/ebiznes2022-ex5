@@ -18,14 +18,11 @@ import org.ktorm.support.postgresql.insertReturning
 import java.util.*
 
 object GoogleLoginAPI {
-    private val database = Database.instance
-
     suspend fun callback(call: ApplicationCall) {
         val principal = call.authentication.principal<OAuthAccessTokenResponse.OAuth2>()
 
         if (principal != null) {
             val accessToken = principal.accessToken
-            val userId: UUID?
 
             val info: String = HttpClient().get("https://www.googleapis.com/oauth2/v2/userinfo") {
                 headers {
@@ -37,39 +34,7 @@ object GoogleLoginAPI {
             val objectMapper = ObjectMapper()
             val userInfo = objectMapper.readValue(info, OauthUserInfoGoogle::class.java)
 
-            val query = database.from(Users)
-                .joinReferencesAndSelect()
-                .where {
-                    Users.email eq userInfo.email
-                }
-
-            val users = query.map { row ->
-                Users.createEntity(row)
-            }
-
-            userId = if (users.isEmpty()) {
-                println(info)
-
-                database.insertReturning(Users, Users.id) {
-                    set(it.username, userInfo.email)
-                    set(it.email, userInfo.email)
-                    set(it.accessToken, accessToken)
-                }
-            } else {
-                println(users.first())
-                println(users.first().id)
-                users.first().id
-            }
-
-            call.sessions.set(UserSession(loggedIn = true, principal.accessToken, userId!!))
-            call.response.cookies.append(
-                Cookie(
-                    name = "user_info",
-                    path = "/",
-                    value = UserSession(loggedIn = true, principal.accessToken, userId!!).toString()
-                )
-            )
-            call.respondRedirect("http://localhost:3000/")
+            LoginCommon.respond(call, accessToken, userInfo.email)
         }
     }
 }
