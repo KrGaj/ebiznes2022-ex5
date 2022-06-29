@@ -45,6 +45,8 @@ ENV JAVA_HOME=${JVM_DIR}"/jdk-17.0.2"
 ENV PATH=$JAVA_HOME/bin:$PATH
 ENV PATH=$PATH:${KOTLIN_DIR}"/bin":${KTLINT_DIR}
 
+RUN mkdir data
+
 VOLUME [ "data" ]
 
 RUN echo "exec zsh" >> .bashrc \
