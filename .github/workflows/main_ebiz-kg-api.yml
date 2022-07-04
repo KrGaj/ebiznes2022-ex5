@@ -23,14 +23,14 @@ jobs:
       uses: docker/login-action@v1
       with:
         registry: https://index.docker.io/v1/
-        username: ${{ secrets.AzureAppService_ContainerUsername_a324fd9826f244279efed6a6a027e8a5 }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_2fafc86ae3fa4281989a21902d7bc051 }}
+        username: ${{ secrets.AzureAppService_ContainerUsername_b34d2953abde4de0a47311c2c3899552 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_b0c5545604144d08806e0489a2e95f26 }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_a324fd9826f244279efed6a6a027e8a5 }}/ebiznes2022:${{ github.sha }}
+        tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_b34d2953abde4de0a47311c2c3899552 }}/ebiznes2022:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -47,5 +47,5 @@ jobs:
       with:
         app-name: 'ebiz-kg-api'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_e2a6fc37e46f4c6ba144600fdc142195 }}
-        images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_a324fd9826f244279efed6a6a027e8a5 }}/ebiznes2022:${{ github.sha }}'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_8a449a0611a242dabce0d447c0325322 }}
+        images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_b34d2953abde4de0a47311c2c3899552 }}/ebiznes2022:${{ github.sha }}'
