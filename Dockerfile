@@ -64,7 +64,8 @@ RUN echo "DATABASE_USERNAME=${DATABASE_USERNAME} \\" >> ./entrypoint.sh
 RUN echo "DATABASE_PASSWORD=${DATABASE_PASSWORD} \\" >> ./entrypoint.sh
 RUN echo "./gradlew run" >> ./entrypoint.sh
 
-RUN sudo chmod -R u+rwx ./
+RUN sudo chown -R user ./
+RUN sudo chmod -R 755 ./
 
 ENTRYPOINT ["/bin/zsh", "./entrypoint.sh"]
 
