@@ -1,5 +1,6 @@
 package com.example.plugins
 
+import com.example.database.Config
 import io.ktor.client.*
 import io.ktor.client.engine.apache.*
 import io.ktor.http.*
@@ -17,8 +18,8 @@ fun Application.configureOauth() {
                     authorizeUrl = "https://accounts.google.com/o/oauth2/auth",
                     accessTokenUrl = "https://accounts.google.com/o/oauth2/token",
                     requestMethod = HttpMethod.Post,
-                    clientId = System.getenv("GOOGLE_CLIENT_ID"),
-                    clientSecret = System.getenv("GOOGLE_CLIENT_SECRET"),
+                    clientId = Config.googleClientId,
+                    clientSecret = Config.googleClientSecret,
                     defaultScopes = listOf(
                         "https://www.googleapis.com/auth/userinfo.profile",
                         "https://www.googleapis.com/auth/userinfo.email"
@@ -38,8 +39,8 @@ fun Application.configureOauth() {
                     authorizeUrl = "https://github.com/login/oauth/authorize",
                     accessTokenUrl = "https://github.com/login/oauth/access_token",
                     requestMethod = HttpMethod.Post,
-                    clientId = System.getenv("GITHUB_CLIENT_ID"),
-                    clientSecret = System.getenv("GITHUB_CLIENT_SECRET"),
+                    clientId = Config.githubClientId,
+                    clientSecret = Config.githubClientSecret,
                     defaultScopes = listOf(
                         "read:user",
                         "user:email"
