@@ -6,6 +6,7 @@ ARG KOTLIN_DIR_COMMON=${LIB_DIR}"/kotlin"
 ARG KOTLIN_DIR=${KOTLIN_DIR_COMMON}"/kotlinc"
 ARG KTLINT_DIR=${KOTLIN_DIR_COMMON}"/lint"
 ARG BACKEND_DIR="./app"
+ARG ENTRYPOINT_FILENAME="./entrypoint.sh"
 
 RUN apt-get update \
     && apt-get install -y apt-utils sudo wget -f
@@ -54,21 +55,18 @@ RUN [ ! -d ${JVM_DIR} ] && sudo mkdir ${BACKEND_DIR} || exit 0
 WORKDIR $BACKEND_DIR
 COPY . .
 
-RUN touch ./entrypoint.sh
-RUN echo "#/bin/zsh/\nGOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} \\" > ./entrypoint.sh
-RUN echo "GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET} \\" >> ./entrypoint.sh
-RUN echo "GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID} \\" >> ./entrypoint.sh
-RUN echo "GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET} \\" >> ./entrypoint.sh
-RUN echo "DATABASE_URL=${DATABASE_URL} \\" >> ./entrypoint.sh
-RUN echo "DATABASE_USERNAME=${DATABASE_USERNAME} \\" >> ./entrypoint.sh
-RUN echo "DATABASE_PASSWORD=${DATABASE_PASSWORD} \\" >> ./entrypoint.sh
-RUN echo "./gradlew run" >> ./entrypoint.sh
+RUN touch ${ENTRYPOINT_FILENAME}
+RUN echo "#/bin/zsh/\nGOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} \\" > ${ENTRYPOINT_FILENAME}
+RUN echo "GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET} \\" >> ${ENTRYPOINT_FILENAME}
+RUN echo "GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID} \\" >> ${ENTRYPOINT_FILENAME}
+RUN echo "GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET} \\" >> ${ENTRYPOINT_FILENAME}
+RUN echo "DATABASE_URL=${DATABASE_URL} \\" >> ${ENTRYPOINT_FILENAME}
+RUN echo "DATABASE_USERNAME=${DATABASE_USERNAME} \\" >> ${ENTRYPOINT_FILENAME}
+RUN echo "DATABASE_PASSWORD=${DATABASE_PASSWORD} \\" >> ${ENTRYPOINT_FILENAME}
+RUN echo "./gradlew run" >> ${ENTRYPOINT_FILENAME}
 
 RUN sudo chown -R user ./
 RUN sudo chmod -R 755 ./
-
-RUN echo "${SOMETHING}"
-RUN echo "${APPSETTING_SOMETHING}"
 
 ENTRYPOINT ["/bin/zsh", "./entrypoint.sh"]
 
