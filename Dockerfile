@@ -67,6 +67,9 @@ RUN echo "./gradlew run" >> ./entrypoint.sh
 RUN sudo chown -R user ./
 RUN sudo chmod -R 755 ./
 
+RUN echo "${SOMETHING}"
+RUN echo "${APPSETTING_SOMETHING}"
+
 ENTRYPOINT ["/bin/zsh", "./entrypoint.sh"]
 
 EXPOSE 3000
