@@ -57,9 +57,20 @@ RUN [ ! -d ${JVM_DIR} ] && sudo mkdir ${BACKEND_DIR} || exit 0
 
 WORKDIR $BACKEND_DIR
 
-RUN echo "#/bin/zsh/\nGOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET} GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID} GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET} DATABASE_URL=${DATABASE_URL} DATABASE_USERNAME=${DATABASE_USERNAME} DATABASE_PASSWORD=${DATABASE_PASSWORD} ./gradlew run" > ./entrypoint.sh
+RUN echo "package com.example.database" > ./src/main/kotlin/com/example/database/Config.kt
 
-ENTRYPOINT ["/bin/zsh", "./entrypoint.sh"]
+RUN echo "\nobject Config {" >> ./src/main/kotlin/com/example/database/Config.kt
+RUN echo "    val url: String = \"${DATABASE_URL}\"" >> ./src/main/kotlin/com/example/database/Config.kt
+RUN echo "    val username: String = \"${DATABASE_USERNAME}\"" >> ./src/main/kotlin/com/example/database/Config.kt
+RUN echo "    val password: String = \"${DATABASE_PASSWORD}\"" >> ./src/main/kotlin/com/example/database/Config.kt
+RUN echo "    val githubClientId: String = \"${GITHUB_CLIENT_ID}\"" >> ./src/main/kotlin/com/example/database/Config.kt
+RUN echo "    val githubClientSecret: String = \"${GITHUB_CLIENT_SECRET}\"" >> ./src/main/kotlin/com/example/database/Config.kt
+RUN echo "    val googleClientId: String = \"${GOOGLE_CLIENT_ID}\"" >> ./src/main/kotlin/com/example/database/Config.kt
+RUN echo "    val googleClientSecret: String = \"${GOOGLE_CLIENT_SECRET}\"" >> ./src/main/kotlin/com/example/database/Config.kt
+RUN echo "    const val driver = \"org.postgresql.Driver\"" >> ./src/main/kotlin/com/example/database/Config.kt
+RUN echo "}" >> ./src/main/kotlin/com/example/database/Config.kt
+
+ENTRYPOINT ["/bin/zsh", "./gradlew run"]
 
 EXPOSE 3000
 EXPOSE 8080
