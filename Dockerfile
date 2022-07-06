@@ -68,8 +68,6 @@ RUN echo "./gradlew run" >> ${ENTRYPOINT_FILENAME}
 RUN sudo chown -R user ./
 RUN sudo chmod -R 755 ./
 
-RUN echo "${SOMETHING}"
-
 ENTRYPOINT ["/bin/zsh", "./entrypoint.sh"]
 
 EXPOSE 3000
