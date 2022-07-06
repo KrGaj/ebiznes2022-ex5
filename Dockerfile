@@ -57,6 +57,9 @@ RUN [ ! -d ${JVM_DIR} ] && sudo mkdir ${BACKEND_DIR} || exit 0
 
 WORKDIR $BACKEND_DIR
 
+RUN ls -la
+RUN echo $PWD
+
 RUN echo "package com.example.database" > ./src/main/kotlin/com/example/database/Config.kt
 
 RUN echo "\nobject Config {" >> ./src/main/kotlin/com/example/database/Config.kt
