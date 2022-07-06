@@ -5,7 +5,7 @@ ARG JVM_DIR=${LIB_DIR}"/jvm"
 ARG KOTLIN_DIR_COMMON=${LIB_DIR}"/kotlin"
 ARG KOTLIN_DIR=${KOTLIN_DIR_COMMON}"/kotlinc"
 ARG KTLINT_DIR=${KOTLIN_DIR_COMMON}"/lint"
-ARG BACKEND_DIR="/home/runner/work/ebiznes2022-ex5/ebiznes2022-ex5"
+ARG BACKEND_DIR="./app"
 
 RUN apt-get update \
     && apt-get install -y apt-utils sudo wget -f
@@ -46,16 +46,13 @@ ENV JAVA_HOME=${JVM_DIR}"/jdk-17.0.2"
 ENV PATH=$JAVA_HOME/bin:$PATH
 ENV PATH=$PATH:${KOTLIN_DIR}"/bin":${KTLINT_DIR}
 
-RUN mkdir "data"
-
-VOLUME [ "data" ]
-
 RUN echo "exec zsh" >> .bashrc \
     && source .bashrc
 
 RUN [ ! -d ${JVM_DIR} ] && sudo mkdir ${BACKEND_DIR} || exit 0
 
 WORKDIR $BACKEND_DIR
+COPY . .
 
 RUN touch ./entrypoint.sh
 RUN echo "#/bin/zsh/\nGOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} \\" > ./entrypoint.sh
@@ -66,6 +63,8 @@ RUN echo "DATABASE_URL=${DATABASE_URL} \\" >> ./entrypoint.sh
 RUN echo "DATABASE_USERNAME=${DATABASE_USERNAME} \\" >> ./entrypoint.sh
 RUN echo "DATABASE_PASSWORD=${DATABASE_PASSWORD} \\" >> ./entrypoint.sh
 RUN echo "./gradlew run" >> ./entrypoint.sh
+
+RUN sudo chmod -R u+rwx ./
 
 ENTRYPOINT ["/bin/zsh", "./entrypoint.sh"]
 
