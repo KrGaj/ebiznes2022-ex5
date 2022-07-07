@@ -9,15 +9,6 @@ on:
       - main
   workflow_dispatch:
 
-env:
-  GITHUB_CLIENT_ID: '${{ secrets.OAUTH_GITHUB_CLIENT_ID }}'
-  GITHUB_CLIENT_SECRET: '${{ secrets.OAUTH_GITHUB_CLIENT_SECRET }}'
-  GOOGLE_CLIENT_ID: '${{ secrets.OAUTH_GOOGLE_CLIENT_ID }}'
-  GOOGLE_CLIENT_SECRET: '${{ secrets.OAUTH_GOOGLE_CLIENT_SECRET }}'
-  DATABASE_URL: '${{ secrets.DATABASE_URL }}'
-  DATABASE_USERNAME: '${{ secrets.DATABASE_USERNAME }}'
-  DATABASE_PASSWORD: '${{ secrets.DATABASE_PASSWORD }}'
-
 jobs:
   build:
     runs-on: 'ubuntu-latest'
@@ -42,6 +33,14 @@ jobs:
         push: true
         tags: ebiznes2.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_79c7737b4aea4a84a60832f0dbb30d34 }}/krystian0120/ebiznes2022:${{ github.sha }}
         file: ./Dockerfile
+        secrets: |
+          "GITHUB_CLIENT_ID=${{ secrets.OAUTH_GITHUB_CLIENT_ID }}"
+          "GITHUB_CLIENT_SECRET=${{ secrets.OAUTH_GITHUB_CLIENT_SECRET }}"
+          "GOOGLE_CLIENT_ID=${{ secrets.OAUTH_GOOGLE_CLIENT_ID }}"
+          "GOOGLE_CLIENT_SECRET=${{ secrets.OAUTH_GOOGLE_CLIENT_SECRET }}"
+          "DATABASE_URL=${{ secrets.DATABASE_URL }}"
+          "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}"
+          "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}"
 
   deploy:
     runs-on: ubuntu-latest
