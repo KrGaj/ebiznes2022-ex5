@@ -44,14 +44,17 @@ object UserAPI {
         }
 
         val cart = database.insertReturning(Carts, Carts.id) {
-            set(it.userId, user.id)
+            set(it.userId, id)
         }
 
         if (id == null || cart == null) {
             call.respond(HttpStatusCode.InternalServerError)
         }
         else {
-            call.respond(HttpStatusCode.OK, id)
+            call.respond(HttpStatusCode.OK, mapOf(
+                "userId" to id,
+                "cartId" to cart
+            ))
         }
     }
 

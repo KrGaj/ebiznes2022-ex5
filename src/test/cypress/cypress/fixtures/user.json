@@ -1,0 +1,8 @@
+[
+  {
+    "username": "abcd",
+    "email": "abc@def.com",
+    "passwordAsHash": "0123456789",
+    "accessToken": "12345"
+  }
+]
