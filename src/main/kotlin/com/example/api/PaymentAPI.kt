@@ -63,7 +63,9 @@ object PaymentAPI {
 
         when(id) {
             null -> call.respond(HttpStatusCode.InternalServerError)
-            else -> call.respond(HttpStatusCode.OK)
+            else -> call.respond(HttpStatusCode.OK, mapOf(
+                "paymentId" to id
+            ))
         }
     }
 }

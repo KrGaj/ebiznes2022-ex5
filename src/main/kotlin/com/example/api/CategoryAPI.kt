@@ -55,7 +55,9 @@ object CategoryAPI {
 
         when(createdCategory) {
             null -> call.respond(HttpStatusCode.InternalServerError)
-            else -> call.respond(HttpStatusCode.OK, createdCategory)
+            else -> call.respond(HttpStatusCode.OK, mapOf(
+                "categoryId" to createdCategory
+            ))
         }
     }
 
@@ -67,6 +69,8 @@ object CategoryAPI {
                 it.id eq category.id
             }
 
-        call.respond(HttpStatusCode.OK, removedCategory)
+        call.respond(HttpStatusCode.OK, mapOf(
+            "removed" to removedCategory
+        ))
     }
 }

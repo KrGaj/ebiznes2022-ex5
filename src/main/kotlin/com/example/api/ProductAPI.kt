@@ -60,7 +60,9 @@ object ProductAPI {
 
         when(addedProduct) {
             null -> call.respond(HttpStatusCode.InternalServerError)
-            else -> call.respond(HttpStatusCode.OK, addedProduct)
+            else -> call.respond(HttpStatusCode.OK, mapOf(
+                "productId" to addedProduct
+            ))
         }
     }
 
@@ -72,7 +74,9 @@ object ProductAPI {
                 Products.id eq product.id
             }
 
-        call.respond(HttpStatusCode.OK, removed)
+        call.respond(HttpStatusCode.OK, mapOf(
+            "removedProducts" to removed
+        ))
     }
 
     suspend fun updateProduct(call: ApplicationCall) {
@@ -91,6 +95,8 @@ object ProductAPI {
                 }
             }
 
-        call.respond(HttpStatusCode.OK, updated)
+        call.respond(HttpStatusCode.OK, mapOf(
+            "updatedProducts" to updated
+        ))
     }
 }

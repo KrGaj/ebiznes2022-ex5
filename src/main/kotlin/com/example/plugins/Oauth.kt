@@ -2,7 +2,7 @@ package com.example.plugins
 
 import com.example.database.Config
 import io.ktor.client.*
-import io.ktor.client.engine.apache.*
+import io.ktor.client.engine.java.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -27,7 +27,7 @@ fun Application.configureOauth() {
                 )
             }
 
-            client = HttpClient(Apache)
+            client = HttpClient(Java)
         }
 
         oauth("auth-oauth-github") {
@@ -48,7 +48,7 @@ fun Application.configureOauth() {
                 )
             }
 
-            client = HttpClient(Apache)
+            client = HttpClient(Java)
         }
     }
 }
