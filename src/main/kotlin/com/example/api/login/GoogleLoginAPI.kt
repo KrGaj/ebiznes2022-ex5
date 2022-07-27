@@ -1,4 +1,4 @@
-package com.example.api
+package com.example.api.login
 
 import com.example.model.session.OauthUserInfoGoogle
 import com.fasterxml.jackson.databind.ObjectMapper

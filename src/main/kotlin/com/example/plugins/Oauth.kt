@@ -50,5 +50,48 @@ fun Application.configureOauth() {
 
             client = HttpClient(Java)
         }
+
+        oauth("auth-oauth-gitlab") {
+            urlProvider = { "http://localhost:8080/callback/gitlab" }
+
+            providerLookup = {
+                OAuthServerSettings.OAuth2ServerSettings(
+                    name = "facebook",
+                    authorizeUrl = "https://gitlab.com/oauth/authorize",
+                    accessTokenUrl = "https://gitlab.com/oauth/token",
+                    requestMethod = HttpMethod.Post,
+                    clientId = Config.gitlabClientId,
+                    clientSecret = Config.gitlabClientSecret,
+                    defaultScopes = listOf(
+                        "read_user",
+                        "profile",
+                        "email"
+                    )
+                )
+            }
+
+            client = HttpClient(Java)
+        }
+
+//        oauth("auth-oauth-facebook") {
+//            urlProvider = { "http://localhost:8080/callback/facebook" }
+//
+//            providerLookup = {
+//                OAuthServerSettings.OAuth2ServerSettings(
+//                    name = "facebook",
+//                    authorizeUrl = "https://www.facebook.com/v14.0/dialog/oauth",
+//                    accessTokenUrl = "https://graph.facebook.com/v14.0/oauth/access_token",
+//                    requestMethod = HttpMethod.Post,
+//                    clientId = Config.facebookClientId,
+//                    clientSecret = Config.facebookClientSecret,
+//                    defaultScopes = listOf(
+//                        "public_profile",
+//                        "email"
+//                    )
+//                )
+//            }
+//
+//            client = HttpClient(Java)
+//        }
     }
 }

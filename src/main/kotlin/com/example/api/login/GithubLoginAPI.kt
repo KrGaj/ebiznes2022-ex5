@@ -1,4 +1,4 @@
-package com.example.api
+package com.example.api.login
 
 import com.example.model.session.OauthUserEmailsGithub
 import com.example.model.session.OauthUserInfoGithub
