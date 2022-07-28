@@ -13,7 +13,7 @@ object CartAPI {
     private val database = Database.instance
 
     suspend fun getByUserId(call: ApplicationCall) {
-        val userId = UUID.fromString(call.parameters["userId"])
+        val userId = UUID.fromString(call.parameters["user_id"])
 
         val cartQuery = database
             .from(Carts)
@@ -75,11 +75,11 @@ object CartAPI {
     suspend fun removeProduct(call: ApplicationCall) {
         val cartProduct = call.receive<CartProduct>()
 
-        database.delete(CartProducts) {
+        val removed = database.delete(CartProducts) {
             it.id eq cartProduct.id
         }
 
-        call.respond(HttpStatusCode.OK)
+        call.respond(HttpStatusCode.OK, mapOf("removed" to removed))
     }
 
     suspend fun updateProduct(call: ApplicationCall) {
@@ -90,10 +90,10 @@ object CartAPI {
             return
         }
 
-        database.update(CartProducts) {
+        val updated = database.update(CartProducts) {
             set(it.amount, cartProduct.amount)
         }
 
-        call.respond(HttpStatusCode.OK)
+        call.respond(HttpStatusCode.OK, mapOf("updated" to updated))
     }
 }

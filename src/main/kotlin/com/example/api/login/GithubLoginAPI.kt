@@ -25,8 +25,10 @@ object GithubLoginAPI {
                 }
             }.body()
 
-            val objectMapper = ObjectMapper()
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            val objectMapper = ObjectMapper().apply {
+                configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            }
+
             var userInfo = objectMapper.readValue(info, OauthUserInfoGithub::class.java)
 
             if (userInfo.email == null) {

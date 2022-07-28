@@ -1,5 +1,8 @@
 package com.example.api.login
 
+import com.example.model.session.OauthUserInfoGitlab
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -21,8 +24,16 @@ object GitlabLoginAPI {
                 }
             }.body()
 
+            val objectMapper = ObjectMapper().apply {
+                configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            }
+
+            val userInfo = objectMapper.readValue(info, OauthUserInfoGitlab::class.java)
+
             println("GitLab user info")
-            println(info)
+            println(userInfo)
+
+            LoginCommon.respond(call, accessToken, userInfo.email)
         }
     }
 }
