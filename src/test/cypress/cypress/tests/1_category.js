@@ -26,6 +26,7 @@ describe("GET category", () => {
             .then((response) => {
                 expect(response.status).to.eq(200)
                 assert.isNotNull(response.body)
+                expect(response.body).to.include(categories[0].id)
                 expect(response.body).to.include(categories[0].name)
             })
     })

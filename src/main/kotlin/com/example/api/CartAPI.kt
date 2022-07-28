@@ -55,7 +55,7 @@ object CartAPI {
 
         println("CartAPI.addProduct: $test")
 
-        call.respond(HttpStatusCode.OK)
+        call.respond(HttpStatusCode.OK, mapOf("cartProductId" to id))
     }
 
     suspend fun addMultipleProducts(call: ApplicationCall) {
