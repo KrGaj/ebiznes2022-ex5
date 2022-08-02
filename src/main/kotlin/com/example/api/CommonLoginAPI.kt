@@ -10,10 +10,10 @@ object CommonLoginAPI {
     suspend fun getLoginStatus(call: ApplicationCall) {
         val session = call.sessions.get<UserSession>()
         println("Session: $session")
-        var userSession = UserSession(false, "", null)
+        var userSession = UserSession(false, "")
 
         if (session != null) {
-            userSession = UserSession(true, session.accessToken, session.userId)
+            userSession = UserSession(true, session.accessToken)
         }
 
         println("Login status get: $userSession")

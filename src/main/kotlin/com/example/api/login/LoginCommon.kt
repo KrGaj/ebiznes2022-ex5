@@ -14,7 +14,6 @@ import io.ktor.server.response.*
 import io.ktor.server.sessions.*
 import org.ktorm.dsl.*
 import org.ktorm.support.postgresql.insertReturning
-import java.util.*
 
 object LoginCommon {
     private val database = Database.instance
@@ -56,12 +55,12 @@ object LoginCommon {
 
         val token = generateToken(JwtUserInfo(user.id.toString(), user.username, user.email))
 
-        call.sessions.set(UserSession(loggedIn = true, token, user.id))
+        call.sessions.set(UserSession(loggedIn = true, token))
         call.response.cookies.append(
             Cookie(
                 name = "user_info",
                 path = "/",
-                value = UserSession(loggedIn = true, token, user.id).toString()
+                value = UserSession(loggedIn = true, token).toString()
             )
         )
         call.respondRedirect("http://localhost:3000/")
