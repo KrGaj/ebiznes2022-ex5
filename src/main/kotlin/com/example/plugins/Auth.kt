@@ -1,14 +1,41 @@
 package com.example.plugins
 
-import com.example.database.Config
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
+import com.example.config.Config
+import com.example.model.session.JwtUserInfo
 import io.ktor.client.*
 import io.ktor.client.engine.java.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
 
-fun Application.configureOauth() {
+fun Application.configureAuth() {
     install(Authentication) {
+        jwt("auth-jwt") {
+            realm = Config.jwt_realm
+
+            verifier(JWT
+                .require(Algorithm.HMAC256(Config.jwt_secret))
+                .withIssuer(Config.jwt_issuer)
+                .build()
+            )
+
+            validate {
+                val userId = it.payload.getClaim("userId").asString()
+                val username = it.payload.getClaim("username").asString()
+                val email = it.payload.getClaim("email").asString()
+
+                if (userId != null && username != null && email != null) {
+                    JwtUserInfo(userId, username, email)
+                }
+                else {
+                    null
+                }
+            }
+        }
+
         oauth("auth-oauth-google") {
             urlProvider = { "http://localhost:8080/callback/google" }
 

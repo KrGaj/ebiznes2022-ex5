@@ -1,4 +1,4 @@
-package com.example.database
+package com.example.config
 
 object Config {
     val url: String = System.getenv("DATABASE_URL")
@@ -12,5 +12,8 @@ object Config {
     val googleClientSecret: String = System.getenv("GOOGLE_CLIENT_SECRET")
 //    val facebookClientId: String = System.getenv("FACEBOOK_CLIENT_ID")
 //    val facebookClientSecret: String = System.getenv("FACEBOOK_CLIENT_SECRET")
+    val jwt_secret: String = System.getenv("JWT_SECRET")
+    val jwt_issuer: String = System.getenv("JWT_ISSUER")
+    val jwt_realm: String = System.getenv("JWT_REALM")
     const val driver = "org.postgresql.Driver"
 }
