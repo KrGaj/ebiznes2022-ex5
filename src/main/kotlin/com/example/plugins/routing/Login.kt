@@ -1,6 +1,5 @@
 package com.example.plugins.routing
 
-import com.example.api.CommonLoginAPI
 import com.example.api.login.FacebookLoginAPI
 import com.example.api.login.GithubLoginAPI
 import com.example.api.login.GitlabLoginAPI
@@ -49,10 +48,6 @@ fun Application.loginRouting() {
             get("/callback/facebook") {
                 FacebookLoginAPI.callback(call)
             }
-        }
-
-        get("/login/status") {
-            CommonLoginAPI.getLoginStatus(call)
         }
     }
 }
