@@ -2,8 +2,10 @@ package com.example.api
 
 import com.example.database.Database
 import com.example.model.*
+import com.example.model.session.JwtUserInfo
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import org.ktorm.dsl.*
@@ -13,29 +15,22 @@ object CartAPI {
     private val database = Database.instance
 
     suspend fun getByUserId(call: ApplicationCall) {
+        println("user_id: ${call.parameters["user_id"]}")
         val userId = UUID.fromString(call.parameters["user_id"])
 
-        val cartQuery = database
-            .from(Carts)
-            .select()
-            .where {
-                Carts.userId eq userId
-            }
-
-        val carts = cartQuery.map { row ->
-            println("${row[Carts.id]}   ${row[Carts.userId]}")
-            Carts.createEntity(row)
-        }
+        val principal = call.principal<JwtUserInfo>()
+        println("Received: ${principal?.email}")
 
         val productsQuery = database
             .from(CartProducts)
             .joinReferencesAndSelect()
+            .where {
+                CartProducts.user eq userId
+            }
 
         val cartProducts = productsQuery.map {row ->
             CartProducts.createEntity(row)
-        }.filter {cartProduct ->
-                cartProduct.id in carts.map { it.id }
-            }
+        }
 
         call.respond(HttpStatusCode.OK, cartProducts)
     }
@@ -44,7 +39,7 @@ object CartAPI {
         val cartProduct = call.receive<CartProduct>()
 
         val id = database.insertAndGenerateKey(CartProducts) {
-            set(it.cart, cartProduct.cart.id)
+            set(it.user, cartProduct.user.id)
             set(it.product, cartProduct.product.id)
             set(it.amount, cartProduct.amount)
         } as UUID

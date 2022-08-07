@@ -10,6 +10,7 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
+import io.ktor.server.response.*
 
 fun Application.configureAuth() {
     install(Authentication) {
@@ -33,6 +34,10 @@ fun Application.configureAuth() {
                 else {
                     null
                 }
+            }
+            
+            challenge { _, _ ->
+                call.respondRedirect("http://localhost:3000/login")
             }
         }
 
@@ -100,25 +105,25 @@ fun Application.configureAuth() {
             client = HttpClient(Java)
         }
 
-//        oauth("auth-oauth-facebook") {
-//            urlProvider = { "http://localhost:8080/callback/facebook" }
-//
-//            providerLookup = {
-//                OAuthServerSettings.OAuth2ServerSettings(
-//                    name = "facebook",
-//                    authorizeUrl = "https://www.facebook.com/v14.0/dialog/oauth",
-//                    accessTokenUrl = "https://graph.facebook.com/v14.0/oauth/access_token",
-//                    requestMethod = HttpMethod.Post,
-//                    clientId = Config.facebookClientId,
-//                    clientSecret = Config.facebookClientSecret,
-//                    defaultScopes = listOf(
-//                        "public_profile",
-//                        "email"
-//                    )
-//                )
-//            }
-//
-//            client = HttpClient(Java)
-//        }
+        oauth("auth-oauth-facebook") {
+            urlProvider = { "http://localhost:8080/callback/facebook" }
+
+            providerLookup = {
+                OAuthServerSettings.OAuth2ServerSettings(
+                    name = "facebook",
+                    authorizeUrl = "https://www.facebook.com/v14.0/dialog/oauth",
+                    accessTokenUrl = "https://graph.facebook.com/v14.0/oauth/access_token",
+                    requestMethod = HttpMethod.Post,
+                    clientId = Config.facebookClientId,
+                    clientSecret = Config.facebookClientSecret,
+                    defaultScopes = listOf(
+                        "public_profile",
+                        "email"
+                    )
+                )
+            }
+
+            client = HttpClient(Java)
+        }
     }
 }

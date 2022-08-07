@@ -22,15 +22,10 @@ CREATE TABLE IF NOT EXISTS products (
     available INTEGER NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS carts (
-    cart_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    user_id UUID NOT NULL REFERENCES users(user_id)
-);
-
 CREATE TABLE IF NOT EXISTS cart_products (
     cart_product_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     product_id UUID NOT NULL REFERENCES products(product_id),
-    cart_id UUID NOT NULL REFERENCES carts(cart_id),
+    user_id UUID NOT NULL REFERENCES users(user_id),
     amount INTEGER NOT NULL
 );
 
