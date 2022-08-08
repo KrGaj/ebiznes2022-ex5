@@ -1,7 +1,6 @@
 package com.example.api
 
 import com.example.database.Database
-import com.example.model.Carts
 import com.example.model.User
 import com.example.model.Users
 import io.ktor.http.*
@@ -43,17 +42,12 @@ object UserAPI {
             set(it.accessToken, user.accessToken)
         }
 
-        val cart = database.insertReturning(Carts, Carts.id) {
-            set(it.userId, id)
-        }
-
-        if (id == null || cart == null) {
+        if (id == null) {
             call.respond(HttpStatusCode.InternalServerError)
         }
         else {
             call.respond(HttpStatusCode.OK, mapOf(
-                "userId" to id,
-                "cartId" to cart
+                "userId" to id
             ))
         }
     }

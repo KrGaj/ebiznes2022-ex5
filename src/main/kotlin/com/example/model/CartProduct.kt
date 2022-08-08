@@ -10,7 +10,7 @@ interface CartProduct: Entity<CartProduct> {
     companion object: Entity.Factory<PurchaseProduct>()
 
     var id: UUID
-    var cart: Cart
+    var user: User
     var amount: Int
     var product: Product
 }
@@ -18,6 +18,6 @@ interface CartProduct: Entity<CartProduct> {
 object CartProducts: Table<CartProduct>("cart_products") {
     val id = uuid("cart_product_id").primaryKey().bindTo { it.id }
     val product = uuid("product_id").references(Products) { it.product }
-    val cart = uuid("cart_id").references(Carts) { it.cart }
+    val user = uuid("user_id").references(Users) { it.user }
     val amount = int("amount").bindTo { it.amount }
 }
