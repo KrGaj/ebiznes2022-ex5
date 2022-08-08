@@ -7,10 +7,8 @@ describe('POST user', () => {
             .then((response) => {
                 expect(response.status).to.eq(200)
                 expect(response.body).to.have.property("userId")
-                expect(response.body).to.have.property("cartId")
 
                 Cypress.env('userId', response.body.userId)
-                Cypress.env('cartId', response.body.cartId)
             })
     })
 

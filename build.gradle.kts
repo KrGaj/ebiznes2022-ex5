@@ -41,6 +41,8 @@ dependencies {
     implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
     implementation("io.ktor:ktor-client-java:$ktor_version")
 
+    implementation("com.stripe:stripe-java:21.0.0")
+
     implementation("ch.qos.logback:logback-classic:$logback_version")
 
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")

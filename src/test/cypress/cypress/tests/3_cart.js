@@ -3,7 +3,7 @@ const server = require("./../config/config.json")
 describe("POST cart", () => {
     it("Add product to cart", () => {
         cy.request("POST", server.serverURL + "cart", {
-            cart: Cypress.env("cartId"),
+            user: Cypress.env("userId"),
             amount: "2",
             product: Cypress.env("productId")
         })
@@ -24,12 +24,12 @@ describe("GET cart", () => {
             .then((response) => {
                 expect(response.body.status).to.eq(200)
                 expect(response.body[0]).to.have.property("id")
-                expect(response.body[0]).to.have.property("cart")
+                expect(response.body[0]).to.have.property("user")
                 expect(response.body[0]).to.have.property("amount")
                 expect(response.body[0]).to.have.property("product")
 
                 expect(response.body[0].id).to.eq(Cypress.env("cartProductId"))
-                expect(response.body[0].cart).to.eq(Cypress.env("cartId"))
+                expect(response.body[0].user).to.eq(Cypress.env("userId"))
                 expect(response.body[0].amount).to.eq(2)
                 expect(response.body[0].product).to.eq(Cypress.env("productId"))
             })
