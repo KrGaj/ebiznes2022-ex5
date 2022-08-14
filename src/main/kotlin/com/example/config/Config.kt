@@ -15,5 +15,6 @@ object Config {
     val jwt_secret: String = System.getenv("JWT_SECRET")
     val jwt_issuer: String = System.getenv("JWT_ISSUER")
     val jwt_realm: String = System.getenv("JWT_REALM")
+    val stripe_secret: String = System.getenv("STRIPE_SECRET")
     const val driver = "org.postgresql.Driver"
 }
