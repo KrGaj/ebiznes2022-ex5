@@ -8,7 +8,7 @@ import io.ktor.server.routing.*
 fun Application.stripeRouting() {
     routing {
         authenticate("auth-jwt") {
-            route("/secret/") {
+            route("/secret") {
                 get {
                     StripeAPI.getSecret(call)
                 }

@@ -15,7 +15,7 @@ object StripeAPI {
 
         val params = PaymentIntentCreateParams
             .builder()
-            .setAmount(amount)
+            .setAmount(amount * 100)
             .setCurrency("pln")
             .setAutomaticPaymentMethods(
                 PaymentIntentCreateParams.AutomaticPaymentMethods
